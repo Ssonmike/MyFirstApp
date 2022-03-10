@@ -104,43 +104,48 @@
     var dd = document.getElementById('dd_1');
     const male_btn = document.getElementById('male');
     const female_btn = document.getElementById('female');
+    var pumpum = document.querySelectorAll(".textdd");
+    var elm = document.createElement('div');
+
+
 
     b.addEventListener('click', ()=>{
         var res_male = (5 + ((parseInt(h.value))*(6.25)) + ((parseInt(w.value))*10) - ((parseInt(a.value))*7));
         var res_female = (((10)* (parseInt(w.value))) + ((6.25)*(parseInt(h.value)))-((5)*(parseInt(a.value)))-161);
 
-        async function getData(){
+
+        async function getData(n){
              const a = await fetch('Food1.csv');
              const b = await a.text();
              const c = b.split('\n').slice(1);
              var kcal = 0;
-                    c.forEach(foods =>{
-                        const food = foods.split(',');
-                        const menu = food[1];
-                        var kcala = food[3];
-                        const all = {menu,kcal}; 
-                        kcal = (parseInt(kcal) + parseInt(kcala));
-                        if(male_btn.checked == true){
 
-                            if(kcal < res_male){
+                    c.forEach(foods =>{
+                        var food = foods.split(',');
+                        var menu = food[1].split('\n');
+                        var kcala = food[3];
+                        var all = {menu,kcal}; 
+                        kcal = (parseInt(kcal) + parseInt(kcala));
+                        if(male_btn.checked != true) return;
+                            if(kcal <= res_male){
                             for(var i = 0; i <= menu.length; i++){
-                                dd.append(menu[i]);
-                            }
-                            }else{
-                        }
-                        }else if(female_btn.checked == true){
+                               var new_food = menu[i].split('\n');
+                               pumpum[n].textContent = new_food;
+                               }
+                        }else if(female_btn.checked != true) return;
                             if(kcal < res_female){
                             for(var i = 0; i <= menu.length; i++){
-                                dd.append(menu[i]);
+                               pumpum[n].textContent = new_food;
                             }
-                            }else{              
-                        }
+                            }
                         }
                         
-                        }
+                        
                     )
                 }
-                getData();
+                for(var n = 0; n<=pumpum.length; n++){
+                    getData(n);
+                }
         })
     } 
 calculadora();
